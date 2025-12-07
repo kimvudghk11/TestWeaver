@@ -1,7 +1,9 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { User } from './users/entities/user.entity'; // User 엔티티 임포트
 
 @Module({
   imports: [
@@ -10,7 +12,23 @@ import { AppService } from './app.service';
       isGlobal: true, // 모든 모듈에서 ConfigService 사용 가능
       envFilePath: '.env', // 프로젝트 루트의 .env 파일 로드
     }),
-    // 추후 DataBaseModule, AuthModule 등 다른 모듈 추가 가능
+    // TypeORM 비동기 설정 (환경변수 로드 후 실행하기 위함)
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        type: 'mysql',
+        host: configService.get<string>('DB_HOST', 'localhost'),
+        port: configService.get<number>('DB_PORT', 3306),
+        username: configService.get<string>('DB_USER', 'root'),
+        password: configService.get<string>('DB_PASSWORD', ''),
+        database: configService.get<string>('DB_NAME', 'testweaver'),
+        // 엔티티 목록 (나중에 모듈이 많아지면 autoLoadEntities: true로 변경 고려)
+        entities: [User], // User 엔티티 등록
+        synchronize: configService.get<string>('NODE_ENV') !== 'production', // 개발 환경에서만 테이블 자동 생성/수정 (주의 필요)
+        logging: configService.get<string>('NODE_ENV') !== 'production', // 쿼리 로그 출력
+      }),
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],
