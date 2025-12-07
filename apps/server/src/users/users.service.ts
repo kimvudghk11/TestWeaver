@@ -53,7 +53,7 @@ export class UsersService {
     }
 
     // 로그인 시 사용자 조회를 위한 메서드
-    async findByLoginId(loginId: string): Promise<User | null> {
+    async findOneByLoginId(loginId: string): Promise<User | null> {
         return this.usersRepository.findOne({ where: { loginId } });
     }
 
