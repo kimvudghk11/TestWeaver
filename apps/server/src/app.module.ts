@@ -3,7 +3,10 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
+
+// User
 import { User } from './users/entities/user.entity'; // User 엔티티 임포트
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -29,6 +32,7 @@ import { User } from './users/entities/user.entity'; // User 엔티티 임포트
         logging: configService.get<string>('NODE_ENV') !== 'production', // 쿼리 로그 출력
       }),
     }),
+    UsersModule, // UsersModule 등록
   ],
   controllers: [AppController],
   providers: [AppService],
