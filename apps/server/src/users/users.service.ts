@@ -13,7 +13,7 @@ export class UsersService {
     ) {}
 
     // 회원가입 (사용자 생성)
-    async createUser(createUserDto: CreateUserDto): Promise<User> {
+    async create(createUserDto: CreateUserDto): Promise<User> {
         const { loginId, email, name, password, phone } = createUserDto;
 
         // 중복 확인 (ID or Email)

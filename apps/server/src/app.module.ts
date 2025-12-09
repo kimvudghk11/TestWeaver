@@ -8,6 +8,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './users/entities/user.entity'; // User 엔티티 임포트
 import { UsersModule } from './users/users.module';
 
+// Auth
+import { AuthModule } from './auth/auth.module';
+
 @Module({
   imports: [
     // 환경 변수 설정 (기존 config/env.js 대체)
@@ -33,6 +36,7 @@ import { UsersModule } from './users/users.module';
       }),
     }),
     UsersModule, // UsersModule 등록
+    AuthModule, // AuthModule 등록
   ],
   controllers: [AppController],
   providers: [AppService],
