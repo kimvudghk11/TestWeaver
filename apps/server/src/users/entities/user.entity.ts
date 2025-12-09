@@ -23,10 +23,10 @@ export class User {
 
     // 보안상 코드에서는 passwordHash보다 password라고 부르는 것이 직관적일 때가 많지만,
     // 기존 DB 컬럼명과의 매핑으 명확히 보여주기 위해 아래와 같이 설정
-    @Column({ name: 'password_hash', length: 255})
+    @Column({ type: 'varchar', name: 'password_hash', length: 255})
     password: string;
 
-    @Column({ length:20, nullable:true })
+    @Column({ type: 'varchar', length:20, nullable:true })
     phone: string | null; // 전화번호 (nullable)
 
     @Column({ name: 'is_active', type: 'boolean', default: true })
