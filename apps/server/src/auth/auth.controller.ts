@@ -1,15 +1,19 @@
 import {
     Controller,
+    Get,
     Post,
     Body,
     HttpCode,
     HttpStatus,
-    UnprocessableEntityException
+    UnprocessableEntityException,
+    UseGuards,
+    Request,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { LoginDto } from './dto/login.dto';
-import { ApiTags, ApiOperation, ApiResponse } from "@nestjs/swagger";
+import { AuthGuard } from '@nestjs/passport';
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from "@nestjs/swagger";
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -39,5 +43,15 @@ export class AuthController {
         }
 
         return this.authService.login(user);
+    }
+
+    @Get('profile')
+    @UseGuards(AuthGuard('jwt'))
+    @ApiBearerAuth()
+    @ApiOperation({ summary: '프로필 조회' })
+    @ApiResponse({ status: 200, description: '프로필 조회 성공'})
+    @ApiResponse({ status: 401, description: '인증 실패'})
+    getProfile(@Request() req) {
+        return req.user;
     }
 }
