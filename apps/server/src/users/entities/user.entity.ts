@@ -1,10 +1,12 @@
-import { 
-    Entity, 
-    PrimaryGeneratedColumn, 
+import {
+    Entity,
+    PrimaryGeneratedColumn,
     Column,
     CreateDateColumn,
-    UpdateDateColumn, 
+    UpdateDateColumn,
+    OneToMany,
 } from 'typeorm';
+import { Project } from '../../projects/entities/project.entity';
 
 // DB 테이블 이름 지정
 @Entity('users')
@@ -37,4 +39,7 @@ export class User {
 
     @UpdateDateColumn({ name: 'updated_at' })
     updatedAt: Date; // 수정 일시
+
+    @OneToMany(() => Project, (project) => project.user)
+    projects: Project[]; // 사용자가 소유한 프로젝트들
 }

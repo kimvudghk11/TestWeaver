@@ -11,6 +11,9 @@ import { UsersModule } from './users/users.module';
 // Auth
 import { AuthModule } from './auth/auth.module';
 
+// Projects
+import  { ProjectsModule } from './projects/projects.module';
+
 @Module({
   imports: [
     // 환경 변수 설정 (기존 config/env.js 대체)
@@ -37,6 +40,7 @@ import { AuthModule } from './auth/auth.module';
     }),
     UsersModule, // UsersModule 등록
     AuthModule, // AuthModule 등록
+    ProjectsModule, // ProjectsModule 등록
   ],
   controllers: [AppController],
   providers: [AppService],
