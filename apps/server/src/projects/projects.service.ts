@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Project } from './entities/project.entity';
 import { CreateProjectDto } from './dto/create-project.dto';
+import { UpdateProjectDto } from './dto/update-project.dto';
 import { User } from 'src/users/entities/user.entity';
 
 @Injectable()
@@ -30,7 +31,7 @@ export class ProjectsService {
         });
     }
 
-    // 특정 프로젝트 상세 ㅈ회
+    // 특정 프로젝트 상세 조회
     async findOne(id: string, user: User): Promise<Project> {
         const project = await this.projectRepository.findOne({
             where: { id },
@@ -54,5 +55,14 @@ export class ProjectsService {
         // 존재 여부 확인
         const project = await this.findOne(id, user);
         await this.projectRepository.remove(project);
+    }
+
+    // 프로젝트 수정
+    async update(id: string, updateProjectDto: UpdateProjectDto, user: User): Promise<Project> {
+        const project = await this.findOne(id, user);
+
+        this.projectRepository.merge(project, updateProjectDto);
+
+        return await this.projectRepository.save(project);
     }
 }
