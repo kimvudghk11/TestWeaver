@@ -2,6 +2,7 @@ import {
     Controller,
     Get,
     Post,
+    Patch,
     Body,
     Param,
     Delete,
@@ -12,6 +13,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { ApiTags, ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 import { ProjectsService } from './projects.service';
 import { CreateProjectDto } from './dto/create-project.dto';
+import { UpdateProjectDto } from './dto/update-project.dto';
 
 @ApiTags('Projects')
 @ApiBearerAuth()
@@ -42,5 +44,11 @@ export class ProjectsController {
     @ApiOperation({ summary: '프로젝트 삭제' })
     remove(@Param('id') id: string, @Request() req) {
         return this.projectsService.remove(id, req.user);
+    }
+
+    @Patch(':id')
+    @ApiOperation({ summary: '프로젝트 수정' })
+    update(@Param('id') id: string, @Body() updateProjectDto: UpdateProjectDto, @Request() req) {
+        return this.projectsService.update(id, updateProjectDto, req.user);
     }
 }
